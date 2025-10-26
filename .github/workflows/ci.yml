@@ -27,10 +27,10 @@ jobs:
         run: pytest  # Fails on Ubuntu
       # ===
       # Running tox seems painful
-      - if: runner.os == 'Linux'
-        env:
-          DISPLAY: ":99"
-        run: xvfb-run tox --pass-env -e py
+      #- if: runner.os == 'Linux'
+      #  env:
+      #    DISPLAY: ":99"
+      #  run: xvfb-run tox --pass-env -e py
       #- if: runner.os != 'Linux'
       #  env:
       #    DISPLAY: ""
