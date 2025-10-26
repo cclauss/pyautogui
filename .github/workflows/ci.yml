@@ -23,12 +23,15 @@ jobs:
       - run: python3 -m pip install --upgrade pip
       - run: pip install pytest tox
       - run: pip install --editable .
-      - run: pytest || true
+      - if: runner.os != 'Linux'
+        run: pytest  # Fails on Ubuntu
+      # ===
+      # Running tox seems painful
       - if: runner.os == 'Linux'
         env:
           DISPLAY: ":99"
-        run: xvfb-run tox --pass-env=CI,DISPLAY -e py
-      - if: runner.os != 'Linux'
-        env:
-          DISPLAY: ""
-        run: tox pass_env --pass-env=CI,DISPLAY -e py
+        run: xvfb-run tox --pass-env -e py
+      #- if: runner.os != 'Linux'
+      #  env:
+      #    DISPLAY: ""
+      #  run: tox pass_env --pass-env=CI,DISPLAY -e py
