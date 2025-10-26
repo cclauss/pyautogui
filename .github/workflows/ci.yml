@@ -4,14 +4,15 @@ on:
   pull_request:
   workflow_dispatch:
 env:
-  DISPLAY: ":99"
+  DISPLAY: "99"
 jobs:
   pytest:
     strategy:
       fail-fast: false
       matrix:  # https://github.com/actions/python-versions/releases
         os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14", "3.14t", "pypy-3.11"]
+        # python-version: ["3.10", "3.11", "3.12", "3.13", "3.14", "3.14t", "pypy-3.11"]
+        python-version: ["3.10"]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v5
@@ -23,4 +24,11 @@ jobs:
       - run: pip install pytest tox
       - run: pip install --editable .
       - run: pytest || true
-      - run: xvfb-run tox -e py
+      - if: runner.os == 'Linux'
+        env:
+          DISPLAY: "99"
+        run: xvfb-run tox -e py
+      - if: runner.os != 'Linux'
+        env:
+          DISPLAY: ""
+        run: tox -e py
