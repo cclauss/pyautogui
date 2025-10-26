@@ -4,7 +4,7 @@ on:
   pull_request:
   workflow_dispatch:
 env:
-  DISPLAY: "99"
+  DISPLAY: ":99"
 jobs:
   pytest:
     strategy:
@@ -26,9 +26,9 @@ jobs:
       - run: pytest || true
       - if: runner.os == 'Linux'
         env:
-          DISPLAY: "99"
-        run: xvfb-run tox -e py
+          DISPLAY: ":99"
+        run: xvfb-run tox pass_env -e py
       - if: runner.os != 'Linux'
         env:
           DISPLAY: ""
-        run: tox -e py
+        run: tox pass_env -e py
